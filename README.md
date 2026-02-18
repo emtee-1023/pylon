@@ -1,59 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pylon
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> Centralized multi-tenant deployment and configuration orchestration platform for mobile applications.
 
-## About Laravel
+Pylon is a multi-tenant orchestration service that manages deployment and configuration of applications serving multiple clients from a shared core system.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+It enables applications to dynamically adapt per company by retrieving configuration data using a company identifier — while maintaining a single underlying infrastructure and shared feature set.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Overview
 
-## Learning Laravel
+Pylon supports a **Multi-Tenant Deployment** model:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+> Multiple clients share the same underlying infrastructure and core features. This is generally more economical and faster to deploy since only one app is deployed on app stores but offers limited modification options for individual users.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Instead of maintaining separate deployments per client, applications retrieve their company-specific configuration at runtime from Pylon.
 
-## Laravel Sponsors
+This enables:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Shared infrastructure across all tenants
+- Company-level configuration control
+- Centralized feature management
+- Reduced operational overhead
+- Faster onboarding of new clients
+- Controlled customization within shared constraints
 
-### Premium Partners
+---
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Core Responsibilities
 
-## Contributing
+- Tenant-aware configuration delivery
+- Centralized deployment coordination
+- Feature flag management
+- Environment segmentation
+- Version-aware configuration control
+- Logical tenant isolation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+---
 
-## Code of Conduct
+## Architecture
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```
+┌─────────────────────┐
+│  Client Application │
+└──────────┬──────────┘
+           │
+           │ Company ID + Auth Token
+           ▼
+┌─────────────────────┐
+│     Pylon API      │
+└──────────┬──────────┘
+           │
+           │ Fetch tenant configuration
+           ▼
+┌─────────────────────┐
+│ Configuration Store│
+└─────────────────────┘
+```
 
-## Security Vulnerabilities
+Each application initializes by calling Pylon with a `company_id`.  
+Pylon responds with a configuration payload tailored to that tenant while maintaining shared system integrity.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+---
+
+## Key Concepts
+
+### Tenant
+
+A client organization operating within the shared platform.
+
+### Configuration Profile
+
+A structured configuration object defining how the application behaves for a specific tenant, including:
+
+- Branding parameters
+- API endpoints
+
+---
+
+## Example API Usage
+
+### Fetch Configuration
+
+```bash
+GET /api/v1/config/{company_id}
+Authorization: Bearer <token>
+```
+
+### Example Response
+
+```json
+{
+    "company_id": "a5ab3645-b95c-ec11-8f6f-0666489d8ee3",
+    "branding": {
+        "name": "Kinetic Technology Limited",
+        "primary_color": "#FFA500",
+        "logo_url": "https://kinetics.co.ke/wp-content/uploads/2021/03/KTL-Logo-1.png"
+    },
+    "api": {
+        "base_url": "https://api.platform.example.com"
+    }
+}
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT License - see the [LICENSE](LICENSE) file for details.
