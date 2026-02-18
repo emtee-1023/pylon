@@ -83,8 +83,13 @@ A structured configuration object defining how the application behaves for a spe
 ### Fetch Configuration
 
 ```bash
-GET /api/v1/config/{company_id}
-Authorization: Bearer <token>
+POST /api/v1/config
+Content-Type: application/json
+X-API-KEY: pyl_live_83js9dk29sks92ks0sks...
+
+{
+  "company_id": "a5ab3645-b95c-ec11-8f6f-0666489d8ee3"
+}
 ```
 
 ### Example Response
