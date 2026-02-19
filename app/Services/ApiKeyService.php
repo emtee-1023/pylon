@@ -1,4 +1,5 @@
 <?php
+
 // app/Services/ApiKeyService.php
 
 namespace App\Services;
@@ -8,14 +9,14 @@ use Illuminate\Support\Str;
 
 class ApiKeyService
 {
-    public function generate(string $name, string $companyId, array $scopes = [])
+    public function generate(string $name, string $appName, array $scopes = [])
     {
-        $rawKey = Str::random(64);
+        $rawKey = "pyl_{$appName}_".Str::random(54);
 
         $apiKey = ApiKey::create([
             'name' => $name,
+            'app_name' => $appName,
             'key_hash' => hash('sha256', $rawKey),
-            'company_id' => $companyId,
             'scopes' => $scopes,
             'active' => true,
         ]);

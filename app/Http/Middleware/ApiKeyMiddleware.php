@@ -1,11 +1,9 @@
 <?php
 
-//Protected route Route::middleware('apikkey')
-
 namespace App\Http\Middleware;
 
-use Closure;
 use App\Models\ApiKey;
+use Closure;
 use Illuminate\Http\Request;
 
 class ApiKeyMiddleware
@@ -14,7 +12,7 @@ class ApiKeyMiddleware
     {
         $incomingKey = $request->header('X-API-KEY');
 
-        if (!$incomingKey) {
+        if (! $incomingKey) {
             return response()->json(['message' => 'API key missing'], 401);
         }
 
@@ -24,18 +22,11 @@ class ApiKeyMiddleware
             ->where('active', true)
             ->first();
 
-        if (!$apiKey) {
+        if (! $apiKey) {
             return response()->json(['message' => 'Invalid API key'], 401);
         }
 
-        // Optional: Update last used
-        $apiKey->update([
-            'last_used_at' => now()
-        ]);
-
-        // Attach tenant context
-        $request->attributes->set('company_id', $apiKey->company_id);
-        $request->attributes->set('api_scopes', $apiKey->scopes ?? []);
+        $apiKey->update(['last_used_at' => now()]);
 
         return $next($request);
     }

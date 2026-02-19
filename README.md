@@ -2,7 +2,7 @@
 
 > Centralized multi-tenant deployment and configuration orchestration platform for mobile applications.
 
-Pylon is a multi-tenant orchestration service that manages deployment and configuration of applications serving multiple clients from a shared core system.
+Pylon is a multi-tenant orchestration service that manages deployment and configuration of mobile applications serving multiple clients from a shared core system.
 
 It enables applications to dynamically adapt per company by retrieving configuration data using a company identifier — while maintaining a single underlying infrastructure and shared feature set.
 
@@ -14,13 +14,12 @@ Pylon supports a **Multi-Tenant Deployment** model:
 
 > Multiple clients share the same underlying infrastructure and core features. This is generally more economical and faster to deploy since only one app is deployed on app stores but offers limited modification options for individual users.
 
-Instead of maintaining separate deployments per client, applications retrieve their company-specific configuration at runtime from Pylon.
+Instead of maintaining separate deployments per client, applications retrieve company-specific configuration at runtime from Pylon using an API key that identifies the app.
 
 This enables:
 
 - Shared infrastructure across all tenants
 - Company-level configuration control
-- Centralized feature management
 - Reduced operational overhead
 - Faster onboarding of new clients
 - Controlled customization within shared constraints
@@ -29,12 +28,12 @@ This enables:
 
 ## Core Responsibilities
 
-- Tenant-aware configuration delivery
+- App identification via API keys
+- Company-aware configuration delivery
 - Centralized deployment coordination
-- Feature flag management
 - Environment segmentation
 - Version-aware configuration control
-- Logical tenant isolation
+- Company isolation
 
 ---
 
@@ -43,35 +42,43 @@ This enables:
 ```
 ┌─────────────────────┐
 │  Client Application │
+│  (e.g., ESS App)    │
 └──────────┬──────────┘
            │
-           │ Company ID + Auth Token
+           │ Contains API key in .env: pyl_ESS_xxx
+           │
            ▼
 ┌─────────────────────┐
 │     Pylon API      │
+│  (validates key)   │
 └──────────┬──────────┘
            │
-           │ Fetch tenant configuration
+           │ Receives company_id from user input
+           │
            ▼
 ┌─────────────────────┐
 │ Configuration Store│
+│   (companies)      │
 └─────────────────────┘
 ```
 
-Each application initializes by calling Pylon with a `company_id`.  
-Pylon responds with a configuration payload tailored to that tenant while maintaining shared system integrity.
+Each application contains an API key that identifies the **app** (not the company). Users provide their `company_id` when using the app, and Pylon returns the configuration for that company.
 
 ---
 
 ## Key Concepts
 
-### Tenant
+### App
 
-A client organization operating within the shared platform.
+A deployed application (e.g., ESS, Membership Portal) that embeds a Pylon API key. The API key identifies the app, not the company using it.
+
+### Company
+
+A client organization that uses an app. Each company has its own configuration (branding, API settings) stored in Pylon.
 
 ### Configuration Profile
 
-A structured configuration object defining how the application behaves for a specific tenant, including:
+A structured configuration object defining how the application behaves for a specific company, including:
 
 - Branding parameters
 - API endpoints
@@ -83,9 +90,9 @@ A structured configuration object defining how the application behaves for a spe
 ### Fetch Configuration
 
 ```bash
-POST /api/v1/config
+POST /api/config
 Content-Type: application/json
-X-API-KEY: pyl_live_83js9dk29sks92ks0sks...
+X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 
 {
   "company_id": "a5ab3645-b95c-ec11-8f6f-0666489d8ee3"
