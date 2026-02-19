@@ -9,12 +9,11 @@ use Illuminate\Support\Str;
 
 class ApiKeyService
 {
-    public function generate(string $name, string $appName, array $scopes = [])
+    public function generate(string $appName, array $scopes = [])
     {
-        $rawKey = "pyl_{$appName}_".Str::random(54);
+        $rawKey = "pyl_{$appName}_" . Str::random(54);
 
         $apiKey = ApiKey::create([
-            'name' => $name,
             'app_name' => $appName,
             'key_hash' => hash('sha256', $rawKey),
             'scopes' => $scopes,
