@@ -1,0 +1,319 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Pylon Docs",
+        "version": "0.0.1",
+        "description": "\n# End-to-End Lifecycle of an API Key in Pylon\n\nThe mobile app being deployed to the App Store contains an API key from Pylon in its environment. Customers installing the app only provide their `company_id` \u2014 the app uses the API key silently in the background to determine the app calling the api and the `company_id` to load custom configurations for the customer.\n\n\n## Phase 1 \u2014 Provisioning (Internal)\n\nThis happens when:\n- A new app is onboarded (e.g., ESS, Membership Portal, etc.)\n\n### Step 1: Generate the Key\n\nYou (or an admin panel) run:\n\n```php\n$service->generate(\n    'Kinetic Technology Limited',  // name/description\n    'ESS',                          // app_name\n    ['config:read']                 // scopes\n);\n```\n\nWhat the System does:\n\n1. Generates key with format `pyl_{appName}_{random}`\n2. Hashes it with SHA256\n3. Stores only the hash\n4. Returns raw key ONCE\n\nExample raw key:\n\n```\npyl_ESS_83js9dk29sks92ks0sks...\n```\n\n## Phase 2 \u2014 Embedded in Your App\n\nThe API key is compiled into the mobile app's .env. End customers never see it.\n\n```env\n# Your app's environment file\nPYLON_API_KEY=pyl_ESS_83js9dk29sks92ks0sks...\n```\n\nWhen a customer launches the app and enters their company ID, a request is made to the API with the API key and company ID:\n\n```http\nPOST /api/config\nContent-Type: application/json\nX-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...\n\n{\n  \"company_id\": \"a5ab3645-b95c-ec11-8f6f-0666489d8ee3\"\n}\n```\n\n## Response\n\n```json\n{\n  \"company_id\": \"a5ab3645-b95c-ec11-8f6f-0666489d8ee3\",\n  \"branding\": {\n    \"name\": \"Kinetic Technology Limited\",\n    \"primary_color\": \"#FFA500\",\n    \"logo_url\": \"https://kinetics.co.ke/wp-content/uploads/2021/03/KTL-Logo-1.png\"\n  },\n  \"api\": {\n    \"base_url\": \"https://api.platform.example.com\"\n  }\n}\n```\n\n## What Happens on Every Request\n\n1. App sends request with embedded API key + customer-provided `company_id`\n2. Middleware reads `X-API-KEY`\n3. Validates:\n   - Key exists\n   - Key is active\n4. Controller uses `company_id` from request body to return company-specific config\n"
+    },
+    "servers": [
+        {
+            "url": "http://127.0.0.1:8000/api"
+        }
+    ],
+    "security": [
+        {
+            "http": []
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "operationId": "authentication.login",
+                "summary": "Login",
+                "tags": [
+                    "Authentication"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Invalid credentials"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Login successful"
+                                        },
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "message",
+                                        "token"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    }
+                },
+                "security": []
+            }
+        },
+        "/profile": {
+            "get": {
+                "operationId": "authentication.profile",
+                "summary": "Profile",
+                "tags": [
+                    "Authentication"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "operationId": "authentication.logout",
+                "summary": "Logout",
+                "tags": [
+                    "Authentication"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Logged out successfully"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/config": {
+            "post": {
+                "operationId": "config.getConfig",
+                "description": "This endpoint returns company-specific configuration based on the provided `company_id` and the API key in the request header.",
+                "summary": "Get App Configuration",
+                "tags": [
+                    "Configurations",
+                    "Config"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "company_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "company_id": {
+                                            "type": "string"
+                                        },
+                                        "branding": {
+                                            "type": "string"
+                                        },
+                                        "api": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "company_id",
+                                        "branding",
+                                        "api"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "Company not found"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "const": "company_id is required"
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": []
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "http": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            },
+            "apiKey": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-API-KEY"
+            }
+        },
+        "schemas": {
+            "LoginRequest": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "password": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "password"
+                ],
+                "title": "LoginRequest"
+            }
+        },
+        "responses": {
+            "ValidationException": {
+                "description": "Validation error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Errors overview."
+                                },
+                                "errors": {
+                                    "type": "object",
+                                    "description": "A detailed description of each field that failed validation.",
+                                    "additionalProperties": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "message",
+                                "errors"
+                            ]
+                        }
+                    }
+                }
+            },
+            "AuthenticationException": {
+                "description": "Unauthenticated",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

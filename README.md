@@ -95,7 +95,7 @@ Content-Type: application/json
 X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 
 {
-  "company_id": "a5ab3645-b95c-ec11-8f6f-0666489d8ee3"
+    "company_id": "kinetictechnologylimited" //the company name in lowercase without any spaces
 }
 ```
 
@@ -103,7 +103,7 @@ X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 
 ```json
 {
-    "company_id": "a5ab3645-b95c-ec11-8f6f-0666489d8ee3",
+    "company_id": "kinetictechnologylimited",
     "branding": {
         "name": "Kinetic Technology Limited",
         "primary_color": "#FFA500",

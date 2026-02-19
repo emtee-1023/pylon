@@ -8,13 +8,11 @@ use Illuminate\Http\Request;
 /**
  * @tags Configurations
  */
-
 class ConfigController extends Controller
 {
-
     /**
      * Get App Configuration
-     * 
+     *
      * This endpoint returns company-specific configuration based on the provided `company_id` and the API key in the request header.
      */
     public function getConfig(Request $request)

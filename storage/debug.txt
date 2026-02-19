@@ -1,0 +1,559 @@
+paths type: array
+paths count: 4
+paths is array: yes
+paths is object: no
+cast array keys: 0, 1, 2, 3{
+    "method": "post",
+    "path": "api\/login",
+    "operationId": "authentication.login",
+    "description": "",
+    "summary": "Login",
+    "deprecated": false,
+    "security": [],
+    "tags": [
+        "Authentication"
+    ],
+    "parameters": [],
+    "requestBodyObject": {
+        "description": "",
+        "content": {
+            "application\/json": {
+                "type": "$ref",
+                "format": "",
+                "description": "",
+                "contentMediaType": "",
+                "contentEncoding": "",
+                "example": {},
+                "default": {},
+                "examples": [],
+                "enum": [],
+                "const": null,
+                "nullable": false,
+                "deprecated": false,
+                "pattern": null,
+                "referenceType": "schemas",
+                "shortName": null,
+                "fullName": "App\\Http\\Requests\\LoginRequest"
+            }
+        },
+        "required": true
+    },
+    "responses": [
+        {
+            "code": 401,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": "Invalid credentials",
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "code": 200,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": "Login successful",
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            },
+                            "token": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": null,
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "message",
+                            "token"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "type": "$ref",
+            "format": "",
+            "description": "",
+            "contentMediaType": "",
+            "contentEncoding": "",
+            "example": {},
+            "default": {},
+            "examples": [],
+            "enum": [],
+            "const": null,
+            "nullable": false,
+            "deprecated": false,
+            "pattern": null,
+            "referenceType": "responses",
+            "shortName": null,
+            "fullName": "\\Illuminate\\Validation\\ValidationException"
+        }
+    ],
+    "servers": []
+}{
+    "method": "get",
+    "path": "api\/profile",
+    "operationId": "authentication.profile",
+    "description": "",
+    "summary": "",
+    "deprecated": false,
+    "security": null,
+    "tags": [
+        "Authentication"
+    ],
+    "parameters": [],
+    "requestBodyObject": null,
+    "responses": [
+        {
+            "code": 200,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "string",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "min": null,
+                        "max": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "type": "$ref",
+            "format": "",
+            "description": "",
+            "contentMediaType": "",
+            "contentEncoding": "",
+            "example": {},
+            "default": {},
+            "examples": [],
+            "enum": [],
+            "const": null,
+            "nullable": false,
+            "deprecated": false,
+            "pattern": null,
+            "referenceType": "responses",
+            "shortName": null,
+            "fullName": "\\Illuminate\\Auth\\AuthenticationException"
+        }
+    ],
+    "servers": []
+}{
+    "method": "post",
+    "path": "api\/logout",
+    "operationId": "authentication.logout",
+    "description": "",
+    "summary": "",
+    "deprecated": false,
+    "security": null,
+    "tags": [
+        "Authentication"
+    ],
+    "parameters": [],
+    "requestBodyObject": null,
+    "responses": [
+        {
+            "code": 200,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": "Logged out successfully",
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "type": "$ref",
+            "format": "",
+            "description": "",
+            "contentMediaType": "",
+            "contentEncoding": "",
+            "example": {},
+            "default": {},
+            "examples": [],
+            "enum": [],
+            "const": null,
+            "nullable": false,
+            "deprecated": false,
+            "pattern": null,
+            "referenceType": "responses",
+            "shortName": null,
+            "fullName": "\\Illuminate\\Auth\\AuthenticationException"
+        }
+    ],
+    "servers": []
+}{
+    "method": "post",
+    "path": "api\/config",
+    "operationId": "config.getConfig",
+    "description": "This endpoint returns company-specific configuration based on the provided `company_id` and the API key in the request header.",
+    "summary": "Get App Configuration",
+    "deprecated": false,
+    "security": null,
+    "tags": [
+        "Configurations",
+        "Config"
+    ],
+    "parameters": [],
+    "requestBodyObject": {
+        "description": "",
+        "content": {
+            "application\/json": {
+                "type": {
+                    "type": "object",
+                    "format": "",
+                    "description": "",
+                    "contentMediaType": "",
+                    "contentEncoding": "",
+                    "example": {},
+                    "default": {},
+                    "examples": [],
+                    "enum": [],
+                    "const": null,
+                    "nullable": false,
+                    "deprecated": false,
+                    "pattern": null,
+                    "properties": {
+                        "company_id": {
+                            "type": "string",
+                            "format": "",
+                            "description": "",
+                            "contentMediaType": "",
+                            "contentEncoding": "",
+                            "example": {},
+                            "default": {},
+                            "examples": [],
+                            "enum": [],
+                            "const": null,
+                            "nullable": false,
+                            "deprecated": false,
+                            "pattern": null,
+                            "min": null,
+                            "max": null
+                        }
+                    },
+                    "required": [],
+                    "additionalProperties": null
+                }
+            }
+        },
+        "required": false
+    },
+    "responses": [
+        {
+            "code": 200,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "company_id": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": null,
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            },
+                            "branding": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": null,
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            },
+                            "api": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": null,
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "company_id",
+                            "branding",
+                            "api"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "code": 404,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": "Company not found",
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        },
+        {
+            "code": 400,
+            "content": {
+                "application\/json": {
+                    "type": {
+                        "type": "object",
+                        "format": "",
+                        "description": "",
+                        "contentMediaType": "",
+                        "contentEncoding": "",
+                        "example": {},
+                        "default": {},
+                        "examples": [],
+                        "enum": [],
+                        "const": null,
+                        "nullable": false,
+                        "deprecated": false,
+                        "pattern": null,
+                        "properties": {
+                            "message": {
+                                "type": "string",
+                                "format": "",
+                                "description": "",
+                                "contentMediaType": "",
+                                "contentEncoding": "",
+                                "example": {},
+                                "default": {},
+                                "examples": [],
+                                "enum": [],
+                                "const": "company_id is required",
+                                "nullable": false,
+                                "deprecated": false,
+                                "pattern": null,
+                                "min": null,
+                                "max": null
+                            }
+                        },
+                        "required": [
+                            "message"
+                        ],
+                        "additionalProperties": null
+                    }
+                }
+            },
+            "description": "",
+            "headers": [],
+            "links": []
+        }
+    ],
+    "servers": []
+}
