@@ -84,7 +84,7 @@ Content-Type: application/json
 X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 
 {
-  "company_id": "kinetictechnologylimited" //the company name in lowercase without any spaces
+  "company_id": "kinetictechnologylimited" #the company name in lowercase without any spaces
 }
 ```
 
