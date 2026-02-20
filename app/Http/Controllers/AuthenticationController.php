@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
-use Dedoc\Scramble\Attributes\Security;
-use Dedoc\Scramble\Support\Generator\SecurityScheme;
 
 class AuthenticationController extends Controller
 {
@@ -16,43 +14,63 @@ class AuthenticationController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $credentials = $request->only('name', 'password');
+        try {
+            $credentials = $request->only('name', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('api-token')->plainTextToken;
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('api-token')->plainTextToken;
+
+                return response()->json([
+                    'message' => 'Login successful',
+                    'token' => $token,
+                ]);
+            }
 
             return response()->json([
-                'message' => 'Login successful',
-                'token' => $token,
-            ]);
+                'message' => 'Invalid credentials',
+            ], 401);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred during login.',
+                'error' => $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json([
-            'message' => 'Invalid credentials',
-        ], 401);
     }
 
     /**
      * Get Profile Details
-     * 
+     *
      * This endpoint returns the profile details of the current authenticated user
-     * 
      */
     public function profile()
     {
-        return Auth::user();
+        try {
+            return Auth::user();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while fetching profile.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
      * Logout
-     * 
+     *
      * This endpoint logs out the current authenticated user
      */
     public function logout()
     {
-        Auth::user()->currentAccessToken()->delete();
+        try {
+            Auth::user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Logged out successfully']);
+            return response()->json(['message' => 'Logged out successfully']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred during logout.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

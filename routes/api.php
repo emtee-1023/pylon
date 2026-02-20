@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\ConfigController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DeploymentController;
 
 
 // Routes for the Pylon API to Fetch Configurations
@@ -12,3 +13,11 @@ Route::post('/config', [ConfigController::class, 'getConfig'])->middleware(middl
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::get('/profile', [AuthenticationController::class, 'profile'])->middleware('auth:sanctum');
 Route::post('/logout', [AuthenticationController::class, 'logout'])->middleware('auth:sanctum');
+
+//Admin UI routes for managing deployments and companies
+Route::get('/deployments', [DeploymentController::class, 'getDeployedApps'])->middleware('auth:sanctum');
+Route::get('/api-keys', [DeploymentController::class, 'getApiKeys'])->middleware('auth:sanctum');
+Route::get('/companies', [DeploymentController::class, 'getCompanies'])->middleware('auth:sanctum');
+Route::delete('/api-keys/{id}', [DeploymentController::class, 'deleteApiKey'])->middleware('auth:sanctum');
+Route::post('/companies', [DeploymentController::class, 'createCompany'])->middleware('auth:sanctum');
+Route::post('/generate-api-key', [DeploymentController::class, 'generateApiKey'])->middleware('auth:sanctum');
