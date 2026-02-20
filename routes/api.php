@@ -21,3 +21,8 @@ Route::get('/companies', [DeploymentController::class, 'getCompanies'])->middlew
 Route::delete('/api-keys/{id}', [DeploymentController::class, 'deleteApiKey'])->middleware('auth:sanctum');
 Route::post('/companies', [DeploymentController::class, 'createCompany'])->middleware('auth:sanctum');
 Route::post('/generate-api-key', [DeploymentController::class, 'generateApiKey'])->middleware('auth:sanctum');
+Route::post('/app-configs', [DeploymentController::class, 'createAppConfig'])->middleware('auth:sanctum');
+Route::get('/app-configs', [DeploymentController::class, 'getAppConfigs'])->middleware('auth:sanctum');
+Route::get('/app-configs/{companyId}/{appId}', [DeploymentController::class, 'getAppConfig'])->middleware('auth:sanctum');
+Route::patch('/app-configs/update', [DeploymentController::class, 'patchAppConfig'])->middleware('auth:sanctum');
+Route::delete('/app-configs/delete', [DeploymentController::class, 'deleteAppConfig'])->middleware('auth:sanctum');

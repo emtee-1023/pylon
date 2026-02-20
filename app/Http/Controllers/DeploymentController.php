@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\GenerateApiKeyRequest;
+use App\Http\Requests\CreateAppConfigRequest;
+use App\Http\Requests\DeleteAppConfigsRequest;
 use App\Models\ApiKey;
 use App\Models\Company;
 use App\Models\CompanyApp;
@@ -77,6 +79,7 @@ class DeploymentController extends Controller
                     'secondary_color' => $request->input('secondary_color'),
                     'background_color' => $request->input('background_color'),
                     'surface_color' => $request->input('surface_color'),
+                    'logo_url' => $request->input('logo_url'),
                     'theme_mode' => $request->input('theme_mode'),
                 ],
                 'api_config' => [
@@ -205,6 +208,188 @@ class DeploymentController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while deleting API key.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Create App Config
+     * 
+     * This endpoint is used to create an app configuration for a specific company
+     */
+
+    public function createAppConfig(CreateAppConfigRequest $request)
+    {
+        try {
+            $request->validated();
+
+            $companyApp = CompanyApp::create([
+                'company_id' => $request->input('company_id'),
+                'app_id' => $request->input('app_id'),
+                'branding' => [
+                    'primary_color' => $request->input('primary_color'),
+                    'secondary_color' => $request->input('secondary_color'),
+                    'background_color' => $request->input('background_color'),
+                    'surface_color' => $request->input('surface_color'),
+                    'logo_url' => $request->input('logo_url'),
+                    'theme_mode' => $request->input('theme_mode'),
+                ],
+                'api_config' => [
+                    'endpoint' => $request->input('api_endpoint'),
+                ],
+            ]);
+
+            return response()->json([
+                'message' => 'App configuration created successfully.',
+                'data' => [
+                    'company_name' => $companyApp->company->name,
+                    'company_id' => $companyApp->company->company_id,
+                    'app_id' => $companyApp->app_id,
+                    'app_name' => $companyApp->app->app_name,
+                    'branding' => $companyApp->branding,
+                    'api_config' => $companyApp->api_config,
+                ],
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while creating app configuration.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Get App Configs
+     * 
+     * This endpoint retrieves the company specific configurations for all applications, including branding and API configuration details.
+     */
+    public function getAppConfigs()
+    {
+        try {
+            $companyApps = CompanyApp::with('app')->paginate(10);
+
+            return response()->json([
+                'message' => 'App configurations retrieved successfully.',
+                'data' => $companyApps->map(fn($companyApp) => [
+                    'company_name' => $companyApp->company->name,
+                    'company_id' => $companyApp->company->company_id,
+                    'app_id' => $companyApp->app_id,
+                    'app_name' => $companyApp->app->app_name,
+                    'platform' => 'Android & iOS',
+                    'version' => '1.0.0',
+                    'branding' => $companyApp->branding,
+                    'api_config' => $companyApp->api_config,
+                ]),
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while retrieving app configurations.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getAppConfig(Request $request, $company_id, $app_id)
+    {
+        try {
+            $companyApp = CompanyApp::where('company_id', $company_id)
+                ->where('app_id', $app_id)
+                ->with('app')
+                ->firstOrFail();
+
+            return response()->json([
+                'message' => 'App configuration retrieved successfully.',
+                'data' => [
+                    'company_name' => $companyApp->company->name,
+                    'company_id' => $companyApp->company_id,
+                    'app_id' => $companyApp->app_id,
+                    'app_name' => $companyApp->app->app_name,
+                    'platform' => 'Android & iOS',
+                    'version' => '1.0.0',
+                    'branding' => $companyApp->branding,
+                    'api_config' => $companyApp->api_config,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while retrieving app configuration.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Patch App Config
+     * 
+     * This endpoint is used to update the app configuration for a specific company and app combination. It allows updating both branding and API configuration details.
+     */
+
+    public function patchAppConfig(CreateAppConfigRequest $request)
+    {
+        try {
+            $request->validated();
+
+            $companyApp = CompanyApp::where('company_id', $request->input('company_id'))
+                ->where('app_id', $request->input('app_id'))
+                ->firstOrFail();
+
+            $companyApp->update([
+                'branding' => [
+                    'primary_color' => $request->input('primary_color'),
+                    'secondary_color' => $request->input('secondary_color'),
+                    'background_color' => $request->input('background_color'),
+                    'surface_color' => $request->input('surface_color'),
+                    'logo_url' => $request->input('logo_url'),
+                    'theme_mode' => $request->input('theme_mode'),
+                ],
+                'api_config' => [
+                    'endpoint' => $request->input('api_endpoint'),
+                ],
+            ]);
+
+            return response()->json([
+                'message' => 'App configuration updated successfully.',
+                'data' => [
+                    'company_name' => $companyApp->company->name,
+                    'company_id' => $companyApp->company->company_id,
+                    'app_id' => $companyApp->app_id,
+                    'app_name' => $companyApp->app->app_name,
+                    'branding' => $companyApp->branding,
+                    'api_config' => $companyApp->api_config,
+                ],
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while updating app configuration.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete App Config
+     * 
+     * This endpoint is used to delete the app configuration for a specific company and app combination. Deleting an app configuration will remove all custom branding and API configuration details for that company and app, reverting to default settings if applicable.
+     */
+
+    public function deleteAppConfig(DeleteAppConfigsRequest $request)
+    {
+        try {
+            $request->validated();
+
+            $companyApp = CompanyApp::where('company_id', $request->input('company_id'))
+                ->where('app_id', $request->input('app_id'))
+                ->firstOrFail();
+
+            $companyApp->delete();
+
+            return response()->json([
+                'message' => 'App configuration deleted successfully.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while deleting app configuration.',
                 'error' => $e->getMessage(),
             ], 500);
         }

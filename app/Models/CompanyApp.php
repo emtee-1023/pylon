@@ -25,6 +25,6 @@ class CompanyApp extends Model
 
     public function app()
     {
-        return $this->belongsTo(ApiKey::class, 'app_id');
+        return $this->belongsTo(ApiKey::class, 'app_id', 'id');
     }
 }

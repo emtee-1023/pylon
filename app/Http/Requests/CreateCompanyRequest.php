@@ -28,6 +28,7 @@ class CreateCompanyRequest extends FormRequest
             'secondary_color' => 'nullable|string|max:7',
             'background_color' => 'nullable|string|max:7',
             'surface_color' => 'nullable|string|max:7',
+            'logo_url' => 'nullable|url',
             'theme_mode' => 'nullable|in:light,dark,system',
             'api_endpoint' => 'nullable|url',
         ];
@@ -44,6 +45,7 @@ class CreateCompanyRequest extends FormRequest
             'secondary_color.regex' => 'Secondary color must be a valid hex code.',
             'background_color.regex' => 'Background color must be a valid hex code.',
             'surface_color.regex' => 'Surface color must be a valid hex code.',
+            'logo_url.url' => 'Logo URL must be a valid URL.',
             'theme_mode.in' => 'Theme mode must be one of: light, dark, system.',
             'api_endpoint.url' => 'API endpoint must be a valid URL.',
         ];
