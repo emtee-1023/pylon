@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Company extends Model
+class CompanyApp extends Model
 {
     protected $fillable = [
-        'name',
         'company_id',
+        'app_id',
         'branding',
         'api_config',
     ];
@@ -18,8 +18,13 @@ class Company extends Model
         'api_config' => 'array',
     ];
 
-    public function apps()
+    public function company()
     {
-        return $this->hasManyThrough(ApiKey::class, CompanyApp::class, 'company_id', 'id', 'id', 'app_id');
+        return $this->belongsTo(Company::class);
+    }
+
+    public function app()
+    {
+        return $this->belongsTo(ApiKey::class, 'app_id');
     }
 }

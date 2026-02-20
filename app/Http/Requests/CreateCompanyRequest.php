@@ -23,11 +23,11 @@ class CreateCompanyRequest extends FormRequest
     {
         return [
             'company_name' => 'required|string|max:255',
-            'app_id' => 'required|exists:api_keys,id',
-            'primary_color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-            'secondary_color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-            'background_color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-            'surface_color' => 'nullable|string|max:7|regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+            'app_id' => 'nullable|exists:api_keys,id',
+            'primary_color' => 'nullable|string|max:7',
+            'secondary_color' => 'nullable|string|max:7',
+            'background_color' => 'nullable|string|max:7',
+            'surface_color' => 'nullable|string|max:7',
             'theme_mode' => 'nullable|in:light,dark,system',
             'api_endpoint' => 'nullable|url',
         ];
@@ -39,7 +39,6 @@ class CreateCompanyRequest extends FormRequest
             'company_name.required' => 'Company name is required.',
             'company_name.string' => 'Company name must be a string.',
             'company_name.max' => 'Company name cannot exceed 255 characters.',
-            'app_id.required' => 'App ID is required.',
             'app_id.exists' => 'The selected App ID is invalid.',
             'primary_color.regex' => 'Primary color must be a valid hex code.',
             'secondary_color.regex' => 'Secondary color must be a valid hex code.',

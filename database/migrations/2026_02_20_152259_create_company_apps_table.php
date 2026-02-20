@@ -6,20 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('company_apps', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('company_id')->unique();
-            $table->json('branding')->nullable();
-            $table->json('api_config')->nullable();
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('app_id');
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('company_apps');
     }
 };

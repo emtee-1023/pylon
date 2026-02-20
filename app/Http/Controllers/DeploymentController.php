@@ -6,8 +6,10 @@ use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\GenerateApiKeyRequest;
 use App\Models\ApiKey;
 use App\Models\Company;
+use App\Models\CompanyApp;
 use App\Services\ApiKeyService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 /**
  * @tags App Deployment
@@ -58,6 +60,7 @@ class DeploymentController extends Controller
 
             $company = Company::create([
                 'name' => $request->input('company_name'),
+                'company_id' => str_replace(' ', '', strtolower($request->input('company_name'))),
                 'primary_color' => $request->input('primary_color'),
                 'secondary_color' => $request->input('secondary_color'),
                 'background_color' => $request->input('background_color'),
@@ -66,9 +69,33 @@ class DeploymentController extends Controller
                 'api_endpoint' => $request->input('api_endpoint'),
             ]);
 
+            $companyApp = CompanyApp::create([
+                'company_id' => $company->id,
+                'app_id' => $request->input('app_id'),
+                'branding' => [
+                    'primary_color' => $request->input('primary_color'),
+                    'secondary_color' => $request->input('secondary_color'),
+                    'background_color' => $request->input('background_color'),
+                    'surface_color' => $request->input('surface_color'),
+                    'theme_mode' => $request->input('theme_mode'),
+                ],
+                'api_config' => [
+                    'endpoint' => $request->input('api_endpoint'),
+                ],
+            ]);
+
             return response()->json([
                 'message' => 'Company created successfully.',
-                'data' => $company,
+                'data' => [
+                    'company' => $company,
+                    'linked_app' => [
+                        'app_id' => $companyApp->app_id,
+                        'app_name' => $companyApp->app->app_name,
+                        'api_key_hash' => $companyApp->app->key_hash,
+                        'branding' => $companyApp->branding,
+                        'api_config' => $companyApp->api_config,
+                    ],
+                ],
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -96,7 +123,7 @@ class DeploymentController extends Controller
                     'platform' => 'Android & iOS',
                     'version' => '1.0.0',
                     'status' => $app->active ? 'Active' : 'Inactive',
-                    'deployed_at' => $app->created_at,
+                    'deployed_at' => Carbon::parse($app->created_at)->toDateTimeString(),
                 ]),
             ], 200);
         } catch (\Exception $e) {
@@ -150,7 +177,7 @@ class DeploymentController extends Controller
                     'id' => $company->id,
                     'name' => $company->name,
                     'company_id' => $company->company_id,
-                    'linked_apps' => $company->apiKeys()->pluck('app_name'),
+                    'linked_apps' => $company->apps()->pluck('app_name'),
                 ]),
             ], 200);
         } catch (\Exception $e) {
