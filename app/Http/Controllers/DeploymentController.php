@@ -142,7 +142,7 @@ class DeploymentController extends Controller
     public function getCompanies()
     {
         try {
-            $companies = Company::all()->paginate(10);
+            $companies = Company::paginate(10);
 
             return response()->json([
                 'message' => 'Companies retrieved successfully.',
