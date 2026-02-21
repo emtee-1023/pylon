@@ -126,7 +126,7 @@ class DeploymentController extends Controller
                     'platform' => 'Android & iOS',
                     'version' => '1.0.0',
                     'status' => $app->active ? 'Active' : 'Inactive',
-                    'deployed_at' => Carbon::parse($app->created_at)->toDateTimeString(),
+                    'deployed_at' => Carbon::parse($app->created_at)->format('jS F Y'),
                 ]),
             ], 200);
         } catch (\Exception $e) {
@@ -152,7 +152,7 @@ class DeploymentController extends Controller
                 'data' => $apiKeys->map(fn($apiKey) => [
                     'api_key_id' => $apiKey->id,
                     'app_name' => $apiKey->app_name,
-                    'generated_at' => $apiKey->created_at,
+                    'generated_at' => Carbon::parse($apiKey->created_at)->format('jS F Y \a\t h:i A'),
                     'status' => $apiKey->active ? 'Active' : 'Inactive',
                 ]),
             ], 200);
