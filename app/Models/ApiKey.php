@@ -11,6 +11,7 @@ class ApiKey extends Model
         'key_hash',
         'scopes',
         'active',
+        'last_used_at',
     ];
 
     protected $casts = [
