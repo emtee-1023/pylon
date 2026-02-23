@@ -9,13 +9,6 @@ class Company extends Model
     protected $fillable = [
         'name',
         'company_id',
-        'branding',
-        'api_config',
-    ];
-
-    protected $casts = [
-        'branding' => 'array',
-        'api_config' => 'array',
     ];
 
     public function apps()

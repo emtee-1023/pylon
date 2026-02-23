@@ -63,24 +63,22 @@ class DeploymentController extends Controller
             $company = Company::create([
                 'name' => $request->input('company_name'),
                 'company_id' => str_replace(' ', '', strtolower($request->input('company_name'))),
-                'primary_color' => $request->input('primary_color'),
-                'secondary_color' => $request->input('secondary_color'),
-                'background_color' => $request->input('background_color'),
-                'surface_color' => $request->input('surface_color'),
-                'theme_mode' => $request->input('theme_mode'),
-                'api_endpoint' => $request->input('api_endpoint'),
             ]);
 
             $companyApp = CompanyApp::create([
                 'company_id' => $company->id,
                 'app_id' => $request->input('app_id'),
                 'branding' => [
-                    'primary_color' => $request->input('primary_color'),
-                    'secondary_color' => $request->input('secondary_color'),
-                    'background_color' => $request->input('background_color'),
-                    'surface_color' => $request->input('surface_color'),
+                    'primary_color_light' => $request->input('primary_color_light'),
+                    'primary_color_dark' => $request->input('primary_color_dark'),
+                    'secondary_color_light' => $request->input('secondary_color_light'),
+                    'secondary_color_dark' => $request->input('secondary_color_dark'),
+                    'background_color_light' => $request->input('background_color_light'),
+                    'background_color_dark' => $request->input('background_color_dark'),
+                    'surface_color_light' => $request->input('surface_color_light'),
+                    'surface_color_dark' => $request->input('surface_color_dark'),
                     'logo_url' => $request->input('logo_url'),
-                    'theme_mode' => $request->input('theme_mode'),
+                    'default_theme_mode' => $request->input('default_theme_mode'),
                 ],
                 'api_config' => [
                     'endpoint' => $request->input('api_endpoint'),
@@ -228,12 +226,16 @@ class DeploymentController extends Controller
                 'company_id' => $request->input('company_id'),
                 'app_id' => $request->input('app_id'),
                 'branding' => [
-                    'primary_color' => $request->input('primary_color'),
-                    'secondary_color' => $request->input('secondary_color'),
-                    'background_color' => $request->input('background_color'),
-                    'surface_color' => $request->input('surface_color'),
+                    'primary_color_light' => $request->input('primary_color_light'),
+                    'primary_color_dark' => $request->input('primary_color_dark'),
+                    'secondary_color_light' => $request->input('secondary_color_light'),
+                    'secondary_color_dark' => $request->input('secondary_color_dark'),
+                    'background_color_light' => $request->input('background_color_light'),
+                    'background_color_dark' => $request->input('background_color_dark'),
+                    'surface_color_light' => $request->input('surface_color_light'),
+                    'surface_color_dark' => $request->input('surface_color_dark'),
                     'logo_url' => $request->input('logo_url'),
-                    'theme_mode' => $request->input('theme_mode'),
+                    'default_theme_mode' => $request->input('default_theme_mode'),
                 ],
                 'api_config' => [
                     'endpoint' => $request->input('api_endpoint'),
@@ -336,12 +338,16 @@ class DeploymentController extends Controller
 
             $companyApp->update([
                 'branding' => [
-                    'primary_color' => $request->input('primary_color'),
-                    'secondary_color' => $request->input('secondary_color'),
-                    'background_color' => $request->input('background_color'),
-                    'surface_color' => $request->input('surface_color'),
+                    'primary_color_light' => $request->input('primary_color_light'),
+                    'primary_color_dark' => $request->input('primary_color_dark'),
+                    'secondary_color_light' => $request->input('secondary_color_light'),
+                    'secondary_color_dark' => $request->input('secondary_color_dark'),
+                    'background_color_light' => $request->input('background_color_light'),
+                    'background_color_dark' => $request->input('background_color_dark'),
+                    'surface_color_light' => $request->input('surface_color_light'),
+                    'surface_color_dark' => $request->input('surface_color_dark'),
                     'logo_url' => $request->input('logo_url'),
-                    'theme_mode' => $request->input('theme_mode'),
+                    'default_theme_mode' => $request->input('default_theme_mode'),
                 ],
                 'api_config' => [
                     'endpoint' => $request->input('api_endpoint'),

@@ -52,11 +52,19 @@ class ConfigController extends Controller
             'branding' => [
                 'company_name' => $company->name,
                 'logo_url' => $app->branding['logo_url'] ?? null,
-                'primary_color' => $app->branding['primary_color'] ?? null,
-                'secondary_color' => $app->branding['secondary_color'] ?? null,
-                'surface_color' => $app->branding['surface_color'] ?? null,
-                'background_color' => $app->branding['background_color'] ?? null,
-                'theme_mode' => $app->branding['theme_mode'] ?? null,
+                'default_theme_mode' => $app->branding['default_theme_mode'] ?? null,
+            ],
+            'colors_light_mode' => [
+                'primary_color' => $app->branding['primary_color_light'] ?? null,
+                'secondary_color' => $app->branding['secondary_color_light'] ?? null,
+                'surface_color' => $app->branding['surface_color_light'] ?? null,
+                'background_color' => $app->branding['background_color_light'] ?? null,
+            ],
+            'colors_dark_mode' => [
+                'primary_color' => $app->branding['primary_color_dark'] ?? null,
+                'secondary_color' => $app->branding['secondary_color_dark'] ?? null,
+                'surface_color' => $app->branding['surface_color_dark'] ?? null,
+                'background_color' => $app->branding['background_color_dark'] ?? null,
             ],
             'api' => [
                 'base_url' => $app->api_config['endpoint'] ?? null,
