@@ -104,6 +104,8 @@ X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 ```json
 {
     "company_id": "kinetictechnologylimited",
+    "app_name" => "Kronos",
+
     "branding": {
         "company_name": "Kinetic Technology Limited",
         "logo_url": "https://kinetics.co.ke/wp-content/uploads/2021/03/KTL-Logo-1.png",
