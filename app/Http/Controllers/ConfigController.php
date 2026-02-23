@@ -51,6 +51,7 @@ class ConfigController extends Controller
             'company_id' => $company->company_id,
             'app_name' => $app->app->app_name,
             'app_id' => $app->app_id,
+            'company_db_id' => $company->id,
             'branding' => [
                 'company_name' => $company->name,
                 'logo_url' => $app->branding['logo_url'] ?? null,
