@@ -103,15 +103,23 @@ X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 
 ```json
 {
-    "company_id": "kinetictechnologylimite",
+    "company_id": "kinetictechnologylimited",
     "branding": {
         "company_name": "Kinetic Technology Limited",
         "logo_url": "https://kinetics.co.ke/wp-content/uploads/2021/03/KTL-Logo-1.png",
-        "primary_color": "#07ca89",
-        "secondary_color": "#c21414",
+        "default_theme_mode": "dark"
+    },
+    "colors_light_mode": {
+        "primary_color": "#1976D2",
+        "secondary_color": "#424242",
         "surface_color": "#F5F5F5",
-        "background_color": "#FFFFFF",
-        "theme_mode": "dark"
+        "background_color": "#FFFFFF"
+    },
+    "colors_dark_mode": {
+        "primary_color": "#1976D2",
+        "secondary_color": "#424242",
+        "surface_color": "#2D2D2D",
+        "background_color": "#1E1E1E"
     },
     "api": {
         "base_url": "https://api.platform.example.com"
