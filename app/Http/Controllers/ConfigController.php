@@ -50,6 +50,7 @@ class ConfigController extends Controller
         return response()->json([
             'company_id' => $company->company_id,
             'app_name' => $app->app->app_name,
+            'app_id' => $app->app_id,
             'branding' => [
                 'company_name' => $company->name,
                 'logo_url' => $app->branding['logo_url'] ?? null,
