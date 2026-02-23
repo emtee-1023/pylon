@@ -32,16 +32,16 @@ class ConfigController extends Controller
             return response()->json(['message' => 'Invalid API key'], 401);
         }
 
-        $apiKeyRecord->update(['last_used_at' => now()]);
-        $appId = $apiKeyRecord->id;
-        $app = CompanyApp::where('app_id', $appId)->first();
-
-
         if (! $companyId) {
             return response()->json(['message' => 'company_id is required'], 400);
         }
 
         $company = Company::where('company_id', $companyId)->first();
+        $apiKeyRecord->update(['last_used_at' => now()]);
+        $appId = $apiKeyRecord->id;
+        $app = CompanyApp::where('app_id', $appId)
+            ->where('company_id', $company->id)
+            ->first();
 
         if (! $company) {
             return response()->json(['message' => 'Company not found'], 404);
