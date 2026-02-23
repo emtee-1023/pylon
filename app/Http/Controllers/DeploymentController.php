@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateCompanyRequest;
-use App\Http\Requests\GenerateApiKeyRequest;
 use App\Http\Requests\CreateAppConfigRequest;
+use App\Http\Requests\CreateCompanyRequest;
 use App\Http\Requests\DeleteAppConfigsRequest;
+use App\Http\Requests\GenerateApiKeyRequest;
 use App\Models\ApiKey;
 use App\Models\Company;
 use App\Models\CompanyApp;
@@ -118,7 +118,7 @@ class DeploymentController extends Controller
 
             return response()->json([
                 'message' => 'Deployed applications retrieved successfully.',
-                'data' => $apps->map(fn($app) => [
+                'data' => $apps->map(fn ($app) => [
                     'app_id' => $app->id,
                     'app_name' => $app->app_name,
                     'platform' => 'Android & iOS',
@@ -147,7 +147,7 @@ class DeploymentController extends Controller
 
             return response()->json([
                 'message' => 'API keys retrieved successfully.',
-                'data' => $apiKeys->map(fn($apiKey) => [
+                'data' => $apiKeys->map(fn ($apiKey) => [
                     'api_key_id' => $apiKey->id,
                     'app_name' => $apiKey->app_name,
                     'generated_at' => Carbon::parse($apiKey->created_at)->format('jS F Y \a\t h:i A'),
@@ -174,7 +174,7 @@ class DeploymentController extends Controller
 
             return response()->json([
                 'message' => 'Companies retrieved successfully.',
-                'data' => $companies->map(fn($company) => [
+                'data' => $companies->map(fn ($company) => [
                     'id' => $company->id,
                     'name' => $company->name,
                     'company_id' => $company->company_id,
@@ -213,10 +213,9 @@ class DeploymentController extends Controller
 
     /**
      * Create App Config
-     * 
+     *
      * This endpoint is used to create an app configuration for a specific company
      */
-
     public function createAppConfig(CreateAppConfigRequest $request)
     {
         try {
@@ -263,7 +262,7 @@ class DeploymentController extends Controller
 
     /**
      * Get App Configs
-     * 
+     *
      * This endpoint retrieves the company specific configurations for all applications, including branding and API configuration details.
      */
     public function getAppConfigs()
@@ -273,7 +272,7 @@ class DeploymentController extends Controller
 
             return response()->json([
                 'message' => 'App configurations retrieved successfully.',
-                'data' => $companyApps->map(fn($companyApp) => [
+                'data' => $companyApps->map(fn ($companyApp) => [
                     'company_name' => $companyApp->company->name,
                     'company_id' => $companyApp->company->company_id,
                     'app_id' => $companyApp->app_id,
@@ -323,10 +322,9 @@ class DeploymentController extends Controller
 
     /**
      * Patch App Config
-     * 
+     *
      * This endpoint is used to update the app configuration for a specific company and app combination. It allows updating both branding and API configuration details.
      */
-
     public function patchAppConfig(CreateAppConfigRequest $request)
     {
         try {
@@ -336,8 +334,14 @@ class DeploymentController extends Controller
                 ->where('app_id', $request->input('app_id'))
                 ->firstOrFail();
 
-            $companyApp->update([
-                'branding' => [
+            $updateData = [];
+
+            if ($request->has('primary_color_light') || $request->has('primary_color_dark') ||
+                $request->has('secondary_color_light') || $request->has('secondary_color_dark') ||
+                $request->has('background_color_light') || $request->has('background_color_dark') ||
+                $request->has('surface_color_light') || $request->has('surface_color_dark') ||
+                $request->has('logo_url') || $request->has('default_theme_mode')) {
+                $updateData['branding'] = [
                     'primary_color_light' => $request->input('primary_color_light'),
                     'primary_color_dark' => $request->input('primary_color_dark'),
                     'secondary_color_light' => $request->input('secondary_color_light'),
@@ -348,11 +352,18 @@ class DeploymentController extends Controller
                     'surface_color_dark' => $request->input('surface_color_dark'),
                     'logo_url' => $request->input('logo_url'),
                     'default_theme_mode' => $request->input('default_theme_mode'),
-                ],
-                'api_config' => [
+                ];
+            }
+
+            if ($request->has('api_endpoint')) {
+                $updateData['api_config'] = [
                     'endpoint' => $request->input('api_endpoint'),
-                ],
-            ]);
+                ];
+            }
+
+            if (! empty($updateData)) {
+                $companyApp->update($updateData);
+            }
 
             return response()->json([
                 'message' => 'App configuration updated successfully.',
@@ -375,10 +386,9 @@ class DeploymentController extends Controller
 
     /**
      * Delete App Config
-     * 
+     *
      * This endpoint is used to delete the app configuration for a specific company and app combination. Deleting an app configuration will remove all custom branding and API configuration details for that company and app, reverting to default settings if applicable.
      */
-
     public function deleteAppConfig(DeleteAppConfigsRequest $request)
     {
         try {
