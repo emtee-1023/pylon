@@ -24,5 +24,6 @@ Route::post('/generate-api-key', [DeploymentController::class, 'generateApiKey']
 Route::post('/app-configs', [DeploymentController::class, 'createAppConfig'])->middleware('auth:sanctum');
 Route::get('/app-configs', [DeploymentController::class, 'getAppConfigs'])->middleware('auth:sanctum');
 Route::get('/app-configs/{companyId}/{appId}', [DeploymentController::class, 'getAppConfig'])->middleware('auth:sanctum');
+Route::get('/app-configs-qrcode/{companyId}/{appId}', [DeploymentController::class, 'getAppConfigQrCode'])->middleware('auth:sanctum');
 Route::patch('/app-configs/update', [DeploymentController::class, 'patchAppConfig'])->middleware('auth:sanctum');
 Route::delete('/app-configs/delete', [DeploymentController::class, 'deleteAppConfig'])->middleware('auth:sanctum');
