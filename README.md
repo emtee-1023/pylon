@@ -104,7 +104,7 @@ X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
 ```json
 {
     "company_id": "kinetictechnologylimited",
-    "app_name" => "Kronos",
+    "app_name": "Kronos",
 
     "branding": {
         "company_name": "Kinetic Technology Limited",
@@ -115,13 +115,15 @@ X-API-KEY: pyl_ESS_83js9dk29sks92ks0sks...
         "primary_color": "#1976D2",
         "secondary_color": "#424242",
         "surface_color": "#F5F5F5",
-        "background_color": "#FFFFFF"
+        "background_color": "#FFFFFF",
+        "text_color": "#000000"
     },
     "colors_dark_mode": {
         "primary_color": "#1976D2",
         "secondary_color": "#424242",
         "surface_color": "#2D2D2D",
-        "background_color": "#1E1E1E"
+        "background_color": "#1E1E1E",
+        "text_color": "#FFFFFF"
     },
     "api": {
         "base_url": "https://api.platform.example.com"
